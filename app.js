@@ -1,6 +1,7 @@
 const express = require("express");
 const { open } = require("sqlite");
 const sqlite3 = require("sqlite3");
+const bcrypt=require("bcrypt");
 const path = require("path");
 const app = express();
 app.use(express.json());
@@ -60,14 +61,14 @@ app.post("/login", async (request, response) => {
   const dbUser = await db.get(selectUserQuery);
   if (dbUser === undefined) {
     response.status(400);
-    response.send("Invalid User");
+    response.send("Invalid user");
   } else {
     const isPasswordMatched = await bcrypt.compare(password, dbUser.password);
     if (isPasswordMatched === true) {
-      response.send("Login Success!");
+      response.send("Login success!");
     } else {
       response.status(400);
-      response.send("Invalid Password");
+      response.send("Invalid password");
     }
   }
 });
@@ -98,7 +99,7 @@ app.put("/change-password", async (request, response) => {
       }
     } else {
       response.status(400);
-      response.send("Invalid current Password");
+      response.send("Invalid current password");
     }
   }
 });
